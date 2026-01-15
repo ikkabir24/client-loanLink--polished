@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
+
+a.active {
+  background-color: gray;
+  color: white;
+}
+
+/* Light theme */
+:root[data-theme="loanlinkLight"] {
+  --p: 221 83% 53%;   /* primary (blue) */
+  --s: 221 83% 45%;   /* secondary (deeper blue) */
+  --a: 199 89% 48%;   /* accent (sky) */
+
+  --b1: 0 0% 100%;    /* base-100 */
+  --b2: 210 40% 96%;  /* base-200 */
+  --b3: 214 32% 91%;  /* base-300 */
+  --bc: 222 47% 11%;  /* base content text */
+}
+
+/* Dark theme */
+:root[data-theme="loanlinkDark"] {
+  --p: 217 91% 60%;   /* primary (blue-500 feel) */
+  --s: 213 94% 68%;   /* secondary */
+  --a: 199 95% 64%;   /* accent */
+
+  --b1: 222 47% 8%;   /* base-100 dark */
+  --b2: 222 47% 11%;  /* base-200 */
+  --b3: 221 39% 16%;  /* base-300 */
+  --bc: 210 40% 96%;  /* text */
+}

@@ -37,7 +37,7 @@ const NewsletterSection = () => {
     };
 
     return (
-        <SectionWrap className="bg-base-200" variant="default">
+        <SectionWrap variant="default">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6 items-stretch">
                 {/* Left content */}
                 <div className="rounded-2xl border border-base-300 bg-base-100 shadow-sm p-6 md:p-7 flex flex-col">

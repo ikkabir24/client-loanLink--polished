@@ -180,12 +180,6 @@ const Navbar = () => {
 
                 {user ? (
                   <>
-                    <li>
-                      <Link to="/dashboard" className="flex items-center gap-2">
-                        <MdSpaceDashboard /> Dashboard
-                      </Link>
-                    </li>
-
                     <li onClick={handleLogout}>
                       <span className="flex items-center gap-2">
                         <LuLogOut /> Logout

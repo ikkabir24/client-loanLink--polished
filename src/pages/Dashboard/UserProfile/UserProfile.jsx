@@ -125,10 +125,10 @@ const Profile = () => {
                     <p className="mt-1 font-semibold break-all">{user?.uid}</p>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <button
                       onClick={openEdit}
-                      className="btn btn-primary w-full sm:w-auto flex-1"
+                      className="btn btn-primary w-full sm:w-auto"
                       type="button"
                     >
                       <FiEdit2 /> Edit Profile
@@ -136,7 +136,7 @@ const Profile = () => {
 
                     <button
                       onClick={handleLogOut}
-                      className="btn btn-outline btn-primary w-full sm:w-auto flex-1"
+                      className="btn btn-outline btn-primary w-full sm:w-auto"
                       type="button"
                     >
                       <FiLogOut /> Log Out

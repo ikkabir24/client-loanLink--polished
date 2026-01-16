@@ -65,7 +65,7 @@ const AllLoansForAdmin = () => {
     return (
         <div>
             <h3 className="text-lg font-semibold p-3">All Loans: {loans.length}</h3>
-            <p className='text-red-600 font-semibold pb-3 px-3'>Only the latest 6 selected will be displayed on Homepage</p>
+            <p className='text-red-600 font-semibold pb-3 px-3'>Only the latest 8 selected will be displayed on Homepage</p>
             <div>
                 <div className="overflow-x-auto w-full">
                     <table className="table table-zebra w-full">

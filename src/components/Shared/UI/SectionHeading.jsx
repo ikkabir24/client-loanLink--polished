@@ -1,6 +1,6 @@
 import React from "react";
 
-const SectionHeading = ({ title, subtitle, align = "left" }) => {
+const SectionHeading = ({ title, subtitle, align = "center" }) => {
     const alignMap = {
         left: "text-left",
         center: "text-center mx-auto",

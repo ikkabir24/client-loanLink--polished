@@ -1,68 +1,112 @@
 import React from "react";
 import { motion } from "framer-motion";
-import LoanCard from "../../../pages/AllLoans/LoanCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import LoadingSpinner from "../../Shared/LoadingSpinner";
+import { Link } from "react-router";
 
+import LoanCard from "../../../pages/AllLoans/LoanCard";
+import SectionWrap from "../../Shared/UI/SectionWrap";
+import SectionHeading from "../../Shared/UI/SectionHeading";
+
+// Simple skeleton that matches your card layout (no custom colors)
+const LoanCardSkeleton = () => {
+  return (
+    <div className="card bg-base-100 border border-base-300 rounded-2xl shadow-sm h-full overflow-hidden">
+      <div className="aspect-[16/10] w-full bg-base-200 animate-pulse" />
+      <div className="p-5 md:p-6 space-y-4">
+        <div className="h-5 w-3/4 bg-base-200 animate-pulse rounded" />
+        <div className="h-4 w-full bg-base-200 animate-pulse rounded" />
+
+        <div className="flex flex-wrap gap-2">
+          <div className="h-6 w-28 bg-base-200 animate-pulse rounded" />
+          <div className="h-6 w-28 bg-base-200 animate-pulse rounded" />
+          <div className="h-6 w-24 bg-base-200 animate-pulse rounded" />
+        </div>
+
+        <div className="h-10 w-full bg-base-200 animate-pulse rounded-xl" />
+      </div>
+    </div>
+  );
+};
 
 const AvailableLoans = () => {
+  const { data: loans = [], isLoading, isError } = useQuery({
+    queryKey: ["loans-to-display"],
+    queryFn: async () => {
+      const result = await axios(
+        `${import.meta.env.VITE_API_URL}/loan-cards-display`
+      );
+      return result.data;
+    },
+  });
 
-    const { data: loans = [], isLoading } = useQuery({
-        queryKey: ['loans-to-display'],
-        queryFn: async () => {
-            const result = await axios(`${import.meta.env.VITE_API_URL}/loan-cards-display`)
-            return result.data;
-        }
-    })
+  // Card entrance animation (subtle)
+  const cardVariants = {
+    hidden: { opacity: 0, y: 18 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.06,
+        duration: 0.35,
+        ease: "easeOut",
+      },
+    }),
+  };
 
-    const cardVariants = {
-        hidden: { opacity: 0, y: 40 },
-        visible: (i) => ({
-            opacity: 1,
-            y: 0,
-            transition: {
-                delay: i * 0.15, // stagger animation
-                duration: 0.5,
-                ease: "easeOut",
-            },
-        }),
-    };
-
-    if(isLoading) return <LoadingSpinner></LoadingSpinner>
-
-    return (
-        <div className="w-full max-w-7xl mx-auto px-4 py-10">
-           
-            <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="text-3xl md:text-4xl font-bold text-center mb-8"
-            >
-                Available Loan Options
-            </motion.h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {loans.map((loan, index) => (
-                    <motion.div
-                        key={index}
-                        custom={index}
-                        variants={cardVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        whileHover={{ scale: 1.03 }}
-                        className="card bg-base-100 shadow-xl rounded-xl border border-gray-200 hover:shadow-2xl transition duration-300"
-                    >
-                        <LoanCard loan={loan}></LoanCard>
-
-                    </motion.div>
-                ))}
-            </div>
+  return (
+    <SectionWrap className="bg-base-100 pt-12 md:pt-16" variant="default">
+      {/* Heading + CTA row */}
+      <div className="flex flex-col gap-4 md:gap-6">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <SectionHeading
+            title="Available Loan Options"
+            subtitle="Browse featured loans selected for the home page."
+          />
         </div>
-    );
+
+        {/* Error state (no dummy text, clean) */}
+        {isError ? (
+          <div className="alert alert-error">
+            <span>Failed to load loans. Please try again.</span>
+          </div>
+        ) : null}
+
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+          {/* Loading skeletons */}
+          {isLoading
+            ? Array.from({ length: 8 }).map((_, idx) => (
+                <LoanCardSkeleton key={idx} />
+              ))
+            : loans?.map((loan, index) => (
+                <motion.div
+                  key={loan._id}
+                  custom={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.15 }}
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full"
+                >
+                  <LoanCard loan={loan} />
+                </motion.div>
+              ))}
+        </div>
+
+        {/* Empty state */}
+        {!isLoading && !isError && loans?.length === 0 ? (
+          <div className="mt-4 text-center">
+            <p className="text-base-content/70">
+              No loans are available right now.
+            </p>
+          </div>
+        ) : null}
+      </div>
+    </SectionWrap>
+  );
 };
 
 export default AvailableLoans;

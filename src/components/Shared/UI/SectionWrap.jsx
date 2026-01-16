@@ -2,9 +2,9 @@ import React from "react";
 
 const SectionWrap = ({ children, className = "", variant = "default" }) => {
   const variants = {
-    default: "py-12 md:py-16",
-    dense: "py-10 md:py-12",
-    compact: "py-8 md:py-10",
+    default: "pb-12 md:pb-16",
+    dense: "pb-10 md:pb-12",
+    compact: "pb-8 md:pb-10",
   };
 
   return (

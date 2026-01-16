@@ -33,7 +33,7 @@ const SignUp = () => {
     event.preventDefault()
     const form = event.target
     const name = form.name.value
-    const email = form.email.value
+    const email = form.email.value.toLowerCase();
     const password = form.password.value
     const photoURL = form.photoURL.value
 

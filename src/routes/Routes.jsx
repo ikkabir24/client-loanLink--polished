@@ -43,9 +43,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/loan/:id',
-        element: <PrivateRoute>
-          <LoanDetails></LoanDetails>
-        </PrivateRoute>
+        element: <LoanDetails />
       },
       {
         path: '/apply/:id',
@@ -73,9 +71,9 @@ export const router = createBrowserRouter([
     ,
     children: [
       {
-        path: '/dashboard/user-profile',
+        index:true,
         element: <PrivateRoute>
-          <UserProfile/>
+          <UserProfile />
         </PrivateRoute>
       },
       {

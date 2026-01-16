@@ -1,76 +1,103 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, Clock, TrendingUp, Wallet } from "lucide-react";
 
+import SectionWrap from "../../Shared/UI/SectionWrap";
+import SectionHeading from "../../Shared/UI/SectionHeading";
+
 const WhyChooseUs = () => {
+  const benefits = [
+    {
+      id: 1,
+      icon: ShieldCheck,
+      title: "Secure & Trusted",
+      description:
+        "Your personal and loan information is protected with industry-standard security practices.",
+    },
+    {
+      id: 2,
+      icon: Clock,
+      title: "Fast Approval",
+      description:
+        "Applications are reviewed quickly using a clear and efficient verification workflow.",
+    },
+    {
+      id: 3,
+      icon: TrendingUp,
+      title: "Flexible EMI Plans",
+      description:
+        "Choose repayment schedules that align with your income and financial comfort.",
+    },
+    {
+      id: 4,
+      icon: Wallet,
+      title: "Low Interest Rates",
+      description:
+        "Competitive interest structures designed to support responsible borrowing.",
+    },
+  ];
 
-    const benefits = [
-        {
-            id: 1,
-            icon: <ShieldCheck className="w-10 h-10 text-primary" />,
-            title: "Secure & Trusted",
-            description:
-                "Your loan data and personal information are fully protected with industry-standard security.",
-        },
-        {
-            id: 2,
-            icon: <Clock className="w-10 h-10 text-primary" />,
-            title: "Fast Approval",
-            description:
-                "Get your loan approved within hours thanks to our smart and reliable verification system.",
-        },
-        {
-            id: 3,
-            icon: <TrendingUp className="w-10 h-10 text-primary" />,
-            title: "Flexible EMI Plans",
-            description:
-                "Choose repayment schedules that fit your income and financial situation with comfort.",
-        },
-        {
-            id: 4,
-            icon: <Wallet className="w-10 h-10 text-primary" />,
-            title: "Low Interest Rates",
-            description:
-                "Enjoy one of the most competitive interest rate structures designed for all borrowers.",
-        },
-    ];
+  const cardVariants = {
+    hidden: { opacity: 0, y: 18 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.08, duration: 0.35, ease: "easeOut" },
+    }),
+  };
 
-    return (
-        <section className="py-16 bg-base-200">
-            <div className="max-w-7xl mx-auto px-4">
+  return (
+    <SectionWrap variant="default">
+      <SectionHeading
+        title="Why Choose LoanLink?"
+        subtitle="Designed to make microloan management secure, transparent, and easy for everyone."
+      />
 
-                <motion.h2
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true }}
-                    className="text-3xl md:text-4xl font-bold text-center mb-10"
-                >
-                    Why Choose LoanLink?
-                </motion.h2>
+      <div className="mt-6 md:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+        {benefits.map((benefit, index) => {
+          const Icon = benefit.icon;
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {benefits.map((benefit, index) => (
-                        <motion.div
-                            key={benefit.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.15 }}
-                            viewport={{ once: true }}
-                            className="p-6 bg-base-100 shadow-md hover:shadow-xl rounded-xl text-center transition-all"
-                        >
-                            <div className="flex justify-center mb-4">{benefit.icon}</div>
+          return (
+            <motion.div
+              key={benefit.id}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              whileHover={{ y: -2 }}
+              className="h-full"
+            >
+              {/* Card */}
+              <div className="h-full rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-md transition-shadow">
+                <div className="p-5 md:p-6 flex flex-col">
+                  {/* Icon */}
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
 
-                            <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
-                            <p className="text-gray-600 dark:text-gray-300">
-                                {benefit.description}
-                            </p>
-                        </motion.div>
-                    ))}
+                  {/* Accent line */}
+                  <div className="mt-4 h-1 w-12 rounded-full bg-primary/70" />
+
+                  {/* Content */}
+                  <h3 className="mt-4 text-lg font-extrabold leading-snug line-clamp-1">
+                    {benefit.title}
+                  </h3>
+
+                  <p className="mt-2 text-sm text-base-content/70 line-clamp-3">
+                    {benefit.description}
+                  </p>
+
+                  {/* Spacer to keep equal height */}
+                  <div className="flex-1" />
                 </div>
-
-            </div>
-        </section>
-    );
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </SectionWrap>
+  );
 };
 
 export default WhyChooseUs;

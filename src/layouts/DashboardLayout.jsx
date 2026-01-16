@@ -9,18 +9,33 @@ import LoadingSpinner from '../components/Shared/LoadingSpinner';
 import { FaUsersGear } from "react-icons/fa6";
 import { SlDocs } from "react-icons/sl";
 import { HiViewGridAdd } from "react-icons/hi";
+import DashMenu from '../components/Shared/UI/DashMenu';
+import { LogOut as LogOutIcon } from 'lucide-react';
+import useAuth from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const DashboardLayout = () => {
 
   const [role, isRoleLoading] = useRole();
+  const { logOut } = useAuth();
 
-  isRoleLoading && <LoadingSpinner></LoadingSpinner>
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+      toast.success("Logged out successfully");
+    } catch (err) {
+      toast.error(err?.message || "Logout failed");
+    }
+  }
+
+  if (isRoleLoading) return <LoadingSpinner></LoadingSpinner>;
+
   return (
     <div className="mx-auto drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
+        <nav className="navbar sticky top-0 z-50 w-full bg-base-300">
           <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost">
             {/* Sidebar toggle icon */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>
@@ -33,10 +48,11 @@ const DashboardLayout = () => {
 
       <div className="drawer-side is-drawer-close:overflow-visible">
         <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+
+        <div className="flex min-h-full flex-col items-start justify-between bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+
           {/* Sidebar content here */}
           <ul className="menu w-full grow">
-
             {/* List item */}
             <li>
               <Link to={'/'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
@@ -46,99 +62,91 @@ const DashboardLayout = () => {
               </Link>
             </li>
 
-
-            {/* user profile */}
-            <li>
-              <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/user-profile'} data-tip="User Profile">
-                <CgProfile className='my-1.5 inline-block size-4' />
-                <span className="is-drawer-close:hidden">User Profile</span>
-              </NavLink>
-            </li>
-
-
             {/* my loans */}
-            {
-              role === 'borrower' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/my-loans'} data-tip="My Loans">
-                  <GrMoney className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">My Loans</span>
-                </NavLink>
-              </li>
-            }
+            {role === "borrower" && (
+              <DashMenu
+                to="/dashboard/my-loans"
+                icon={GrMoney}
+                label="My Loans"
+              />
+            )}
 
             {/* add loans: manager route */}
-            {
-              role === 'manager' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/add-loans'} data-tip="Add Loans">
-                  <MdAddTask className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">Add Loans</span>
-                </NavLink>
-              </li>
-            }
-            {/* manage loans */}
-            {
-              role === 'manager' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/manage-loans'} data-tip="Manage Loans">
-                  <MdManageSearch className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">Manage Loans</span>
-                </NavLink>
-              </li>
-            }
-            {/* manage pending application */}
-            {
-              role === 'manager' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/pending-loans'} data-tip="Pending Applications">
-                  <MdOutlinePendingActions className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">Pending Applications</span>
-                </NavLink>
-              </li>
-            }
-            {/* approved application */}
-            {
-              role === 'manager' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/approved-loans'} data-tip="Approved Applications">
-                  <MdHistoryEdu className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">Approved Applications</span>
-                </NavLink>
-              </li>
-            }
+            {role === "manager" && (
+              <DashMenu
+                to="/dashboard/add-loans"
+                icon={MdAddTask}
+                label="Add Loans"
+              />
+            )}
+
+            {role === "manager" && (
+              <DashMenu
+                to="/dashboard/manage-loans"
+                icon={MdManageSearch}
+                label="Manage Loans"
+              />
+            )}
+
+            {role === "manager" && (
+              <DashMenu
+                to="/dashboard/pending-loans"
+                icon={MdOutlinePendingActions}
+                label="Pending Applications"
+              />
+            )}
+
+            {role === "manager" && (
+              <DashMenu
+                to="/dashboard/approved-loans"
+                icon={MdHistoryEdu}
+                label="Approved Applications"
+              />
+            )}
+
 
             {/* <--admin section--> */}
+            {
+              role === 'admin' &&
+              <DashMenu
+                to={'/dashboard/manage-users'}
+                icon={FaUsersGear}
+                label={'Manage Users'}
+              />
+            }
+            {
+              role === 'admin' &&
+              <DashMenu
+                to={'/dashboard/all-loan'}
+                icon={SlDocs}
+                label={'All Loans'}
+              />
+            }
+            {
+              role === 'admin' &&
+              <DashMenu
+                to={'/dashboard/loan-applications'}
+                icon={HiViewGridAdd}
+                label={'Loan Applications'}
+              />
+            }
+          </ul>
 
-            {/* approved application */}
-            {
-              role === 'admin' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/manage-users'} data-tip="Manage Users">
-                  <FaUsersGear className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">Manage Users</span>
-                </NavLink>
-              </li>
-            }
-            {
-              role === 'admin' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/all-loan'} data-tip="All Loans">
-                  <SlDocs className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">All Loans</span>
-                </NavLink>
-              </li>
-            }
-            {
-              role === 'admin' &&
-              <li>
-                <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard/loan-applications'} data-tip="All Loan Applications">
-                  <HiViewGridAdd className='my-1.5 inline-block size-4' />
-                  <span className="is-drawer-close:hidden">All Loan Applications</span>
-                </NavLink>
-              </li>
-            }
+          <ul className="menu w-full grow justify-end">
+            {/* user profile */}
+            <li>
+              <Link className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'/dashboard'} data-tip="User Profile">
+                <CgProfile className='my-1.5 inline-block size-4' />
+                <span className="is-drawer-close:hidden">User Profile</span>
+              </Link>
+            </li>
 
+            <li onClick={handleLogOut}>
+              <Link className="is-drawer-close:tooltip is-drawer-close:tooltip-right" to={'#'} data-tip="Log Out">
+                <LogOutIcon className='my-1.5 inline-block size-4' />
+                <span className="is-drawer-close:hidden">Log Out</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

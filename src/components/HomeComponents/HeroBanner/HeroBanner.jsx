@@ -1,91 +1,107 @@
 import React from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+// Template slides (replace images later)
+const slides = [
+    {
+        id: 1,
+        title: "Fast Microloans, Without the Hassle",
+        image: "/hero/loan-1.png",
+        cta: { label: "Explore Loans", to: "/all-loans" },
+    },
+    {
+        id: 2,
+        title: "Transparent Rates. Flexible EMI Plans.",
+        image: "/hero/loan-2.png",
+        cta: { label: "Browse All Loans", to: "/all-loans" },
+    },
+    {
+        id: 3,
+        title: "Built for Borrowers, Managers, and Admins",
+        image: "/hero/loan-3.png",
+        cta: { label: "Go to Dashboard", to: "/dashboard" },
+    },
+];
 
 const HeroBanner = () => {
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.3,
-                delayChildren: 0.2,
-            },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.6, ease: "easeOut" },
-        },
-    };
-
     return (
-        <div className="hero min-h-screen bg-base-200 relative z-1 overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-secondary/20 rounded-full blur-3xl"></div>
-            </div>
-
-            <motion.div
-                className="hero-content flex-col lg:flex-row-reverse z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
+        <section className="w-full">
+            <Swiper
+                modules={[Autoplay, Pagination, Navigation]}
+                autoplay={{ delay: 4500, disableOnInteraction: false }}
+                pagination={{ clickable: true }}
+                navigation
+                loop
+                className="h-[60vh] md:h-[70vh]"
             >
-                <motion.div
-                    className="w-full lg:w-1/2 flex justify-center"
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <motion.img
-                        src="https://img.freepik.com/free-vector/digital-wallet-concept-illustration_114360-7561.jpg?t=st=1709123456~exp=1709127056~hmac=6b9b3e1a8e1a8e1a8e1a8e1a8e1a8e1a"
-                        alt="Financial Growth and Loans"
-                        className="w-full max-w-md lg:max-w-lg rounded-2xl shadow-2xl mask mask-squircle"
-                        animate={{ y: [0, -15, 0] }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    />
-                </motion.div>
-                
-                <motion.div className="w-full lg:w-1/2 text-center lg:text-left mt-8 lg:mt-0">
-                    <motion.h1
-                        className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-                        variants={itemVariants}
-                    >
-                        Empowering Your Dreams with <span className="text-primary">Fast & Fair</span> Loans
-                    </motion.h1>
+                {slides.map((slide) => (
+                    <SwiperSlide key={slide.id}>
+                        <div
+                            className="relative h-full w-full bg-cover bg-center"
+                            style={{ backgroundImage: `url(${slide.image})` }}
+                        >
+                            {/* Gradient overlay for readability (dark mode safe) */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/20 dark:from-black/80 dark:via-black/60 dark:to-black/30" />
 
-                    <motion.p
-                        className="py-6 text-lg text-base-content/80"
-                        variants={itemVariants}
-                    >
-                        LoanLink connects you with trusted financial resources. Whether you need
-                        funds for a startup, education, or personal growth, we provide a
-                        seamless, paperless approval process. Apply today and take the next step.
-                    </motion.p>
+                            {/* Decorative blobs (primary-heavy) */}
+                            <div className="absolute -top-16 -left-16 h-56 w-56 rounded-full bg-primary/25 blur-3xl" />
+                            <div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-primary/20 blur-3xl" />
 
-                    <motion.div
-                        className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-                        variants={itemVariants}
-                    >
-                       
-                        <Link to="/all-loans">
-                            <button className="btn btn-primary btn-lg w-full sm:w-auto shadow-lg hover:shadow-primary/50 transition-all duration-300">
-                                Explore Loans
-                            </button>
-                        </Link>
-                    </motion.div>
-                </motion.div>
-            </motion.div>
-        </div>
+                            {/* Content (Global spacing rule) */}
+                            <div className="relative z-10 flex h-full items-center">
+                                <div className="container mx-auto px-6 md:px-12">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 28 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.6 }}
+                                        className="max-w-xl rounded-2xl bg-black/25 dark:bg-black/35 backdrop-blur-md p-6 md:p-8 text-white border border-white/10 shadow-lg"
+                                    >
+                                        {/* Small badge */}
+                                        <div className="badge badge-outline mb-4">
+                                            LoanLink • Microloans
+                                        </div>
+
+                                        <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
+                                            {slide.title}
+                                        </h1>
+
+                                        <div className="mt-6 flex flex-wrap gap-3 md:gap-4">
+                                            <Link to={slide.cta.to} className="btn btn-primary">
+                                                {slide.cta.label}
+                                            </Link>
+
+                                            <Link
+                                                to="/contact-us"
+                                                className="btn btn-outline border-white/50 text-white hover:border-primary hover:text-white"
+                                            >
+                                                Contact Us
+                                            </Link>
+                                        </div>
+
+                                        {/* Micro trust line */}
+                                        <p className="mt-5 text-sm text-white/70">
+                                            Secure login • Role-based dashboard • Real-time tracking
+                                        </p>
+                                    </motion.div>
+                                </div>
+                            </div>
+
+                            {/* Scroll hint */}
+                            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/80 animate-bounce">
+                                ↓
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </section>
     );
 };
 
